@@ -15,6 +15,7 @@ backend/.pytest_cache/
 # Next.js frontend
 frontend/node_modules/
 frontend/.next/
+frontend/.firebase/
 frontend/out/
 frontend/build/
 frontend/.pnp
