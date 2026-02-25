@@ -9,9 +9,8 @@ function getEnvValue(envText: string, keyName: string) {
   return "";
 }
 
-// Use this command to run the frontend: npm run dev (make sure that you are in the same folder in the terminal)
 export default function Home() {
-  const envPath = path.join(process.cwd(), "..", "api", ".env");
+  const envPath = path.join(process.cwd(), "..", ".env");
   const envText = fs.existsSync(envPath) ? fs.readFileSync(envPath, "utf8") : "";
   const key = getEnvValue(envText, "GOOGLE_MAPS_EMBED_API_KEY");
 

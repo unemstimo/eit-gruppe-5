@@ -15,6 +15,5 @@ app.include_router(google_maps_router)
 def root():
     return {"message": "API is running"}
 
-# Use this command to run the backend: uvicorn src.main:app --reload (make sure that you are in the same folder in the terminal)
 if __name__ == "__main__":
     uvicorn.run("src.main:app", host=API_HOST, port=API_PORT, reload=True)
