@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import ALLOWED_ORIGIN
 from app.models.schemas import SummaryRequest, SummaryResponse
+from app.services.google_maps import geocode
 from app.services.llm_service import summarize_case
 
 app = FastAPI(title="Building Case Summary API")
@@ -19,6 +20,11 @@ app.add_middleware(
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/google-maps/geocode")
+def google_maps_geocode(address: str) -> dict:
+    return geocode(address)
 
 
 @app.post("/summarize", response_model=SummaryResponse)
