@@ -23,8 +23,8 @@ export default function ImportantDatesCard({
             <div key={index} className="flex items-start gap-3">
                 <Calendar size={18} className="text-zinc-500 mt-1" />
                 <div>
-                <p className="font-medium text-zinc-900">{item.label}</p>
-                <p className="text-sm text-zinc-600">{item.date}</p>
+                <p className="font-medium text-zinc-600">{item.label}</p>
+                <p className="text-sm text-zinc-400">{item.date}</p>
                 </div>
             </div>
             ))}

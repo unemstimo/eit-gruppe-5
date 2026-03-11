@@ -9,10 +9,12 @@ export default function Sitelayout({
     children: React.ReactNode
 }>) {
     return (
+    <div className="min-h-screen flexflex-col">
         <Container>
             <Header />
-            <section className='mx-4'>{children}</section>
+            <section className="mx-4 flex-1">{children}</section>
             <Footer />
         </Container>
-    )
+    </div>
+)
 }

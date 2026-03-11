@@ -4,8 +4,8 @@ import { SlidersHorizontal } from "lucide-react";
 export default function Home() {
     return (
         <main className="min-h-screen mb-4">
-        <div className="h-96 bg-zinc-300 flex items-center justify-center mb-8">
-            <h1 className="mb-4 text-2xl font-bold">Aktive plansaker</h1>
+        <div className="h-96 bg-teal-100/20 border-teal-800 rounded-xl flex items-center justify-center mb-8">
+            <h1 className="mb-4 text-2xl text-neutral-500 font-bold">Aktive plansaker</h1>
         </div>
 
         <div>
