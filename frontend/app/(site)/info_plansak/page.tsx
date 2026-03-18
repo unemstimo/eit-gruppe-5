@@ -5,37 +5,98 @@ import AISummaryCard from "@/components/plan/ai-summary-card";
 import ImportantDatesCard from "@/components/plan/important-dates-card";
 import FeedbackButton from "@/components/plan/feedback-button";
 import PlanMap from "@/components/plan/plan-map";
+import { getCase } from "@/lib/api/cases";
 
-export default function InfoPlansakPage() {
+function parseAiSummary(rawSummary: string) {
+    const matches = Array.from(
+        rawSummary.matchAll(/(?:^|\n)\s*\d+\.\s+([\s\S]*?)(?=\n\s*\d+\.\s+|$)/g)
+    );
+
+    if (!matches.length) {
+        return [
+            {
+                title: "KI-oppsummering",
+                text: rawSummary,
+            },
+        ];
+    }
+
+    return matches.map((match) => {
+        const block = match[1].trim();
+        const lines = block
+            .split("\n")
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+        const firstLine = lines[0] ?? "Punkt";
+        const rest = lines.slice(1).join(" ").trim();
+
+        if (firstLine.includes(":")) {
+            const [titlePart, ...textParts] = firstLine.split(":");
+            const title = titlePart.trim();
+            const firstLineText = textParts.join(":").trim();
+            return {
+                title,
+                text: [firstLineText, rest].filter(Boolean).join(" ") || "Ikke oppgitt.",
+            };
+        }
+
+        return {
+            title: firstLine.replace(/[\s:-]+$/, ""),
+            text: rest || "Ikke oppgitt.",
+        };
+    });
+}
+
+type InfoPlansakPageProps = {
+    searchParams: Promise<{
+        caseId?: string;
+    }>;
+};
+
+export default async function InfoPlansakPage({
+    searchParams,
+}: InfoPlansakPageProps) {
+    const resolvedSearchParams = await searchParams;
+    const caseId = resolvedSearchParams.caseId;
+
+    if (!caseId) {
+        return (
+            <main className="min-h-screen px-6 py-10">
+                <div className="mx-auto max-w-6xl">
+                    <Link
+                        href="/planer"
+                        className="mb-8 inline-flex items-center gap-2 text-zinc-500 transition-colors hover:text-zinc-900"
+                    >
+                        <ArrowLeft size={18} />
+                        Tilbake til listen
+                    </Link>
+                    <p className="text-zinc-700">Ingen sak valgt.</p>
+                </div>
+            </main>
+        );
+    }
+
+    const caseData = await getCase(caseId);
+    const parsedSummary = parseAiSummary(
+        caseData.summary ?? "Ingen oppsummering tilgjengelig."
+    );
+
     const plan = {
-        title: "Rønningsvegen 26, Rydningen",
-        address: "Rønningsvegen 26, Trondheim, Norge",
+        title: caseData.title ?? "Uten tittel",
+        address: caseData.title ?? "Trondheim, Norge",
         aiSummary: [
-            {
-                title: "Hva tiltaket gjelder",
-                text: "Reguleringsplan for å legge til rette for bygging av ny enebolig i to etasjer på tomt 9/899.",
-            },
-            {
-                title: "Adresse og eiendom",
-                text: "Rønningsvegen 26, eiendom gnr/bnr 9/899 i Trondheim kommune.",
-            },
-            {
-                title: "Tiltakshaver og plankonsulent",
-                text: "Tiltakshaver er Heimdal Sag Prosjekter AS ved Reidar Grenstad. Plankonsulent er PIR2 AS ved Maryann Tvenning.",
-            },
-            {
-                title: "Avvik fra gjeldende regulering",
-                text: "Gjeldende regulering tillater én bolig per tomt. Tidligere byggesøknader fra 2018–2020 ble opphevet etter naboklager fordi tiltaket krevde dispensasjon eller omregulering.",
-            },
-            {
-                title: "Kommunens vurdering",
-                text: "Det er vurdert flere løsninger for plassering og utforming av bolig. En løsning med saltak og møneretning langs veien anses best tilpasset området.",
-            },
+            ...parsedSummary,
         ],
         importantDates: [
-            { label: "Tidligere byggesøknader behandlet", date: "2018–2020" },
-            { label: "Vedtak", date: "Ikke oppgitt" },
-            { label: "Klagefrist", date: "Ikke oppgitt" },
+            {
+                label: "Frist for innspill",
+                date: caseData.frist_for_innspill ?? "Ikke oppgitt",
+            },
+            {
+                label: "Sist oppdatert",
+                date: caseData.sist_oppdatert ?? "Ikke oppgitt",
+            },
         ],
     };
 
@@ -55,14 +116,7 @@ export default function InfoPlansakPage() {
                         <div className="mb-4 inline-flex rounded-full bg-[#EFE1A7] px-4 py-1 text-sm font-medium text-[#9C7A00]">
                             Under behandling
                         </div>
-
                         <PlanTitle title={plan.title} />
-
-                        <p className="mt-2 text-xl leading-8 text-zinc-800">
-                            Reguleringsplan for ny enebolig i to etasjer på tomt 9/899 i
-                            Rønningsvegen 26, med omregulering for å tilpasse tiltaket til
-                            området og gjeldende krav.
-                        </p>
                     </div>
 
                     <div className="lg:pt-16">

@@ -13,7 +13,7 @@ export default function ImportantDatesCard({
     dates,
 }: ImportantDatesCardProps) {
     return (
-        <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm my-8">
         <h2 className="text-xl font-semibold text-zinc-900 mb-4">
             Viktige datoer
         </h2>
