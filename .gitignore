@@ -34,6 +34,11 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/.pnpm-debug.log*
 
+#Crawler
+crawler/documents/
+crawler/alle_relevante_lenker.txt
+crawler/relevante_lenker.csv
+
 # Misc
 .DS_Store
 .vscode/
