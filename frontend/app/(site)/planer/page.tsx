@@ -101,35 +101,31 @@ export default async function Home() {
 
                     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                         {cases.map((caseItem) => (
-                            <Link
-                                key={caseItem.id}
+                            <Link key={caseItem.id}
                                 href={`/info_plansak?caseId=${encodeURIComponent(caseItem.id)}`}
-                                className="group rounded-[28px] border border-zinc-300 bg-[#F4FAF9] p-5 transition hover:-translate-y-1 hover:shadow-md"
-                            >
+                                className="group flex flex-col rounded-[28px] border border-zinc-300 bg-[#F4FAF9] p-5 transition hover:-translate-y-1 hover:shadow-md"
+                                >
+                                {/* Header — stays at top */}
                                 <div className="mb-4 flex items-start justify-between gap-3">
                                     <div>
-                                        <h2 className="text-2xl font-bold text-zinc-900">
-                                            {caseItem.title ?? "Uten tittel"}
-                                        </h2>
-                                        <p className="text-sm text-zinc-600 mt-1">
-                                            Frist for innspill: {caseItem.frist_for_innspill ?? "Ikke oppgitt"}
-                                        </p>
+                                    <h2 className="text-2xl font-bold text-zinc-900">
+                                        {caseItem.title ?? "Uten tittel"}
+                                    </h2>
+                                    <p className="text-sm text-zinc-600 mt-1">
+                                        Frist for innspill: {caseItem.frist_for_innspill || "Ikke oppgitt"}
+                                    </p>
                                     </div>
                                 </div>
-
-                                <div className="flex min-h-[150px] flex-col justify-between">
-                                    <p className="text-sm leading-6 text-zinc-600 line-clamp-5">
-                                        {"Ingen oppsummering tilgjengelig."}
+                                {/* Body — grows to fill remaining space, pushes footer down */}
+                                <div className="flex flex-1 flex-col justify-between">
+                                    <div /> {/* spacer */}
+                                    <div className="flex items-end justify-between">
+                                    <p className="text-sm text-zinc-700">
+                                        Sist oppdatert: {caseItem.sist_oppdatert ?? "Ikke oppgitt"}
                                     </p>
-
-                                    <div className="mt-6 flex items-end justify-between">
-                                        <p className="text-sm text-zinc-700">
-                                            Sist oppdatert: {caseItem.sist_oppdatert ?? "Ikke oppgitt"}
-                                        </p>
-
-                                        <span className="rounded-full bg-zinc-800 px-4 py-2 text-sm text-white">
-                                            Se sak
-                                        </span>
+                                    <span className="rounded-full bg-zinc-800 px-4 py-2 text-sm text-white">
+                                        Se sak
+                                    </span>
                                     </div>
                                 </div>
                             </Link>
