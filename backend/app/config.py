@@ -13,8 +13,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", DEFAULT_ALLOWED_ORIGIN)
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
-BASE_DIR = Path(__file__).resolve().parents[1]
-PDF_DIR = BASE_DIR / "data" / "pdfs"
+BASE_DIR = Path(__file__).resolve().parents[2]
+PDF_DIR = BASE_DIR / "crawler" / "documents"
 MAX_CASE_CHARS = int(os.getenv("MAX_CASE_CHARS", str(DEFAULT_MAX_CASE_CHARS)))
 # SYSTEM_PROMPT = (
 #     "You summarize building cases in simple language. "

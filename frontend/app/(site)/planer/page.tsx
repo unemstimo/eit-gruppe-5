@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Search, SlidersHorizontal, List, Map } from "lucide-react";
+import { getCases } from "@/lib/api/cases";
 
-export default function Home() {
+
+
+export default async function Home() {
+    const { cases } = await getCases();
+
     return (
         <main className="min-h-screen pb-10">
             <section className="relative mb-10 overflow-hidden border border-zinc-200">
@@ -95,60 +100,36 @@ export default function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                        {Array.from({ length: 9 }, (_, i) => {
-                            const statuses = [
-                                { label: "Åpen for innspill", color: "bg-cyan-100 text-cyan-700" },
-                                { label: "Avlyst", color: "bg-rose-100 text-rose-700" },
-                                { label: "Ferdig", color: "bg-green-100 text-green-700" },
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                            ];
-
-                            const status = statuses[i];
-
-                            return (
-                                <Link
-                                    key={i}
-                                    href="/info_plansak"
-                                    className="group rounded-[28px] border border-zinc-300 bg-[#F4FAF9] p-5 transition hover:-translate-y-1 hover:shadow-md"
+                        {cases.map((caseItem) => (
+                            <Link key={caseItem.id}
+                                href={`/info_plansak?caseId=${encodeURIComponent(caseItem.id)}`}
+                                className="group flex flex-col rounded-[28px] border border-zinc-300 bg-[#F4FAF9] p-5 transition hover:-translate-y-1 hover:shadow-md"
                                 >
-                                    <div className="mb-4 flex items-start justify-between gap-3">
-                                        <div>
-                                            <h2 className="text-2xl font-bold text-zinc-900">
-                                                Sakstittel
-                                            </h2>
-                                            <p className="text-xl text-zinc-800">Beskrivelse</p>
-                                        </div>
-
-                                        {status && (
-                                            <span
-                                                className={`rounded-full px-3 py-1 text-xs font-medium ${status.color}`}
-                                            >
-                                                {status.label}
-                                            </span>
-                                        )}
+                                {/* Header — stays at top */}
+                                <div className="mb-4 flex items-start justify-between gap-3">
+                                    <div>
+                                    <h2 className="text-2xl font-bold text-zinc-900">
+                                        {caseItem.title ?? "Uten tittel"}
+                                    </h2>
+                                    <p className="text-sm text-zinc-600 mt-1">
+                                        Frist for innspill: {caseItem.frist_for_innspill || "Ikke oppgitt"}
+                                    </p>
                                     </div>
-
-                                    <div className="flex min-h-[150px] flex-col justify-between">
-                                        <p className="max-w-[22ch] text-sm leading-6 text-zinc-600">
-                                            Kort ingress om plansaken. Denne kan senere hentes fra backend.
-                                        </p>
-
-                                        <div className="mt-6 flex items-end justify-between">
-                                            <p className="text-sm text-zinc-700">Området</p>
-
-                                            <span className="rounded-full bg-zinc-800 px-4 py-2 text-sm text-white">
-                                                Se sak
-                                            </span>
-                                        </div>
+                                </div>
+                                {/* Body — grows to fill remaining space, pushes footer down */}
+                                <div className="flex flex-1 flex-col justify-between">
+                                    <div /> {/* spacer */}
+                                    <div className="flex items-end justify-between">
+                                    <p className="text-sm text-zinc-700">
+                                        Sist oppdatert: {caseItem.sist_oppdatert ?? "Ikke oppgitt"}
+                                    </p>
+                                    <span className="rounded-full bg-zinc-800 px-4 py-2 text-sm text-white">
+                                        Se sak
+                                    </span>
                                     </div>
-                                </Link>
-                            );
-                        })}
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </section>
